@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Văn Bản Cloud</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 40px; background-color: #f4f7f6; }
+        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background-color: #3498db; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
+        .btn { color: #3498db; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📑 Danh Sách Văn Bản (Google Drive API)</h1>
+        <p><i>Dữ liệu được quản lý bởi MongoDB Atlas Cloud</i></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tên Văn Bản</th>
+                    <th>ID File trên Cloud</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                    <td><code>{{ file.id }}</code></td>
+                    <td><a href="{{ file.webViewLink }}" target="_blank" class="btn">Xem Chi Tiết</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
