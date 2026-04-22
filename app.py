@@ -26,8 +26,16 @@ except Exception as e:
     print(f"Lỗi kết nối MongoDB: {e}")
 
 def get_drive_service():
-    creds = service_account.Credentials.from_service_account_file(
-        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    import json
+    # Đọc file credentials
+    with open(SERVICE_ACCOUNT_FILE) as f:
+        info = json.load(f)
+    
+    # TỰ ĐỘNG SỬA LỖI XUỐNG DÒNG (\n)
+    if 'private_key' in info:
+        info['private_key'] = info['private_key'].replace('\\n', '\n')
+        
+    creds = service_account.Credentials.from_service_account_info(info, scopes=SCOPES)
     return build('drive', 'v3', credentials=creds)
 
 @app.route('/')
