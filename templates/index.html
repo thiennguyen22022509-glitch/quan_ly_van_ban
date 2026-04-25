@@ -1,43 +1,26 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Thống Quản Lý Văn Bản Cloud</title>
+    <title>Quản Lý Văn Bản Cloud</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body { background-color: #f8f9fa; padding-top: 50px; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        h2 { color: #0d6efd; margin-bottom: 25px; border-bottom: 2px solid #0d6efd; pb-2; }
-        .btn-view { border-radius: 20px; }
-    </style>
 </head>
-<body>
-    <div class="container">
-        <h2>📂 Danh Sách Văn Bản Trên Google Drive</h2>
-        <table class="table table-hover">
-            <thead class="table-primary">
-                <tr>
-                    <th>STT</th>
-                    <th>Tên Văn Bản</th>
-                    <th>Hành Động</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for file in files %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ file['name'] }}</td>
-                    <td>
-                        <a href="{{ file['webViewLink'] }}" target="_blank" class="btn btn-sm btn-outline-primary btn-view">Xem Trực Tuyến</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="mt-4 text-end text-muted">
-            <small>Dữ liệu đã được ghi log vào MongoDB Cloud</small>
-        </div>
-    </div>
+<body class="container mt-5">
+    <h2 class="text-primary">📂 Danh Sách Văn Bản (Google Drive + MongoDB)</h2>
+    <table class="table table-bordered mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Tên File</th>
+                <th>Link</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for file in files %}
+            <tr>
+                <td>{{ file['name'] }}</td>
+                <td><a href="{{ file['webViewLink'] }}" target="_blank">Xem ngay</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
