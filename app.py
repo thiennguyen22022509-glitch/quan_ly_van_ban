@@ -14,7 +14,7 @@ SERVICE_ACCOUNT_FILE = 'credentials.json'
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
 # THAY LINK MONGODB CỦA BẠN VÀO ĐÂY
-MONGO_URI = "mongodb+srv://admin:tn187321@cluster0.abcde.mongodb.net/?retryWrites=true&w=majority"
+MONGO_URI = "mongodb+srv://thiennguyen22022509_db_user:<tn187321>@qlvb.yjrph1f.mongodb.net/?appName=QLVB"
 
 def get_drive_service():
     with open(SERVICE_ACCOUNT_FILE) as f:
