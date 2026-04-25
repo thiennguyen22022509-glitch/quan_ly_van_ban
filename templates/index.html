@@ -2,40 +2,42 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>Quản Lý Văn Bản Cloud</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Lý Văn Bản Cloud</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; margin: 40px; background-color: #f4f7f6; }
-        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #3498db; color: white; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        .btn { color: #3498db; text-decoration: none; font-weight: bold; }
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { color: #0d6efd; margin-bottom: 25px; border-bottom: 2px solid #0d6efd; pb-2; }
+        .btn-view { border-radius: 20px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📑 Danh Sách Văn Bản (Google Drive API)</h1>
-        <p><i>Dữ liệu được quản lý bởi MongoDB Atlas Cloud</i></p>
-        <table>
-            <thead>
+        <h2>📂 Danh Sách Văn Bản Trên Google Drive</h2>
+        <table class="table table-hover">
+            <thead class="table-primary">
                 <tr>
+                    <th>STT</th>
                     <th>Tên Văn Bản</th>
-                    <th>ID File trên Cloud</th>
                     <th>Hành Động</th>
                 </tr>
             </thead>
             <tbody>
                 {% for file in files %}
                 <tr>
-                    <td>{{ file.name }}</td>
-                    <td><code>{{ file.id }}</code></td>
-                    <td><a href="{{ file.webViewLink }}" target="_blank" class="btn">Xem Chi Tiết</a></td>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ file['name'] }}</td>
+                    <td>
+                        <a href="{{ file['webViewLink'] }}" target="_blank" class="btn btn-sm btn-outline-primary btn-view">Xem Trực Tuyến</a>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
+        <div class="mt-4 text-end text-muted">
+            <small>Dữ liệu đã được ghi log vào MongoDB Cloud</small>
+        </div>
     </div>
 </body>
 </html>
