@@ -1,4 +1,5 @@
 import os
+import json
 from flask import Flask, render_template
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -8,56 +9,43 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# --- CẤU HÌNH CLOUD ---
-
-# 1. Google Drive API
-SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
+# --- CẤU HÌNH ---
 SERVICE_ACCOUNT_FILE = 'credentials.json'
+SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
-# 2. MongoDB Atlas (Dán mã kết nối của bạn vào đây)
-# NHỚ: Thay <password> bằng mật khẩu thực tế của bạn
-MONGO_URI = "mongodb+srv://admin:<tn187321>@cluster0.abcde.mongodb.net/?retryWrites=true&w=majority"
-
-try:
-    client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
-    db = client['DoAn_Cloud']
-    collection = db['LichSuTruyCap']
-except Exception as e:
-    print(f"Lỗi kết nối MongoDB: {e}")
+# THAY LINK MONGODB CỦA BẠN VÀO ĐÂY
+MONGO_URI = "mongodb+srv://admin:tn187321@cluster0.abcde.mongodb.net/?retryWrites=true&w=majority"
 
 def get_drive_service():
-    import json
-    # Đọc file credentials
     with open(SERVICE_ACCOUNT_FILE) as f:
         info = json.load(f)
-    
-    # TỰ ĐỘNG SỬA LỖI XUỐNG DÒNG (\n)
+    # Sửa lỗi chữ ký JWT bằng cách thay thế \n
     if 'private_key' in info:
         info['private_key'] = info['private_key'].replace('\\n', '\n')
-        
     creds = service_account.Credentials.from_service_account_info(info, scopes=SCOPES)
     return build('drive', 'v3', credentials=creds)
 
 @app.route('/')
 def trang_chu():
     try:
-        # 1. Lấy danh sách file từ Google Drive
+        # Kết nối MongoDB
+        client = MongoClient(MONGO_URI, tlsCAFile=certifi.where())
+        db = client['DoAn_Cloud']
+        collection = db['LichSuTruyCap']
+
+        # Lấy dữ liệu từ Google Drive
         service = get_drive_service()
         results = service.files().list(pageSize=10, fields="files(id, name, webViewLink)").execute()
         items = results.get('files', [])
 
-        # 2. Ghi lịch sử vào MongoDB Cloud (Đáp ứng yêu cầu môn học)
-        log_data = {
+        # Ghi log vào MongoDB
+        collection.insert_one({
             "thoi_gian": datetime.now().strftime("%H:%M:%S - %d/%m/%Y"),
             "hanh_dong": "Xem danh sach van ban",
-            "so_luong": len(items)
-        }
-        collection.insert_one(log_data)
-
+            "trang_thai": "Thanh cong"
+        })
         return render_template('index.html', files=items)
     except Exception as e:
-        return f"Hệ thống đang bảo trì Cloud. Lỗi: {e}"
+        return f"Đang kết nối Cloud... Lỗi xác thực Drive: {e}. Vui lòng kiểm tra quyền chia sẻ thư mục."
 
-# Dòng này cực kỳ quan trọng để chạy trên Vercel/Render
-if __name__ == '__main__':
-    app.run(debug=True)
+app = app # Dòng này cho Vercel
